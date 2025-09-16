@@ -96,13 +96,23 @@ nav ul {
   text-align: center;
   display: grid;
   grid-template-rows: 1em;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   list-style: none;
   padding: 8px;
   margin-left: 5px;
   margin-right: 5px;
   background-color: rgb(24, 24, 24);
   color: white;
+}
+
+nav ul a {
+  text-decoration: none;
+  color: white;
+}
+
+nav ul a:hover {
+  text-decoration: none;
+  color: yellow;
 }
 
 .car-float {
@@ -129,7 +139,7 @@ body {
   
 }
 
-body header, main, footer, nav {
+body header, main, footer, .real-nav {
   background-color: white;
   margin-left: 10vw;
   margin-right: 10vw;
