@@ -24,6 +24,14 @@
     border-radius: 5px;
     text-align: center;
   }
+
+  .vehicle-detail {
+    flex-direction: column;
+  }
+
+  .vehicle-detail img {
+    max-width: 100%;
+  }
 }
 
 @media (min-width: 701px) {
@@ -49,6 +57,14 @@
     padding: 0.5em;
     border-radius: 5px;
     text-align: center;
+  }
+
+  .vehicle-detail {
+    flex-wrap: nowrap;
+  }
+
+  .vehicle-detail img {
+    max-width: 69%;
   }
 }
 
@@ -181,6 +197,24 @@ section ul {
   padding: 8px;
   width: 100%;
   background-color: skyblue;
+}
+
+.vehicle-detail {
+  display: flex;
+  gap: 2rem;
+}
+
+.error {
+  justify-items: center;
+  text-align: center;
+  border: none;
+}
+
+.error-text {
+  color: white;
+  background-color: darkred;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 footer {

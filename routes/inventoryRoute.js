@@ -7,4 +7,10 @@ const invController = require("../controllers/invController")
 router.get("/type/:classificationId", invController.buildByClassificationId);
 router.get("/detail/:invId", invController.buildByInvId);
 
+//error router
+router.get("/trigger-error", (req, res, next) => {
+    console.log("Router passed test");
+    invController.triggerError(req, res, next);
+});
+
 module.exports = router;

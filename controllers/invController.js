@@ -31,4 +31,16 @@ invCont.buildByInvId = async function (req, res, next) {
   });
 }
 
+// error controller
+invCont.triggerError = async function (req, res, next) {
+  console.log("Controller passed");
+  try {
+    throw new Error("This is for testing")
+  } catch (err) {
+    console.log("controller passing to middleware");
+    next(err)
+  }
+}
+
+
 module.exports = invCont
