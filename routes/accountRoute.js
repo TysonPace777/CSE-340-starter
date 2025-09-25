@@ -21,4 +21,12 @@ router.get("/trigger-error", (req, res, next) => {
     accountController.triggerError(req, res, next);
 });
 
+// Process the login attempt
+router.post(
+  "/login",
+  regValidate.loginRules(),
+  regValidate.checkLogData,
+  utilities.handleErrors(accountController.loginAccount)
+)
+
 module.exports = router;
