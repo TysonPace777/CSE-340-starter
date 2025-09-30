@@ -29,4 +29,10 @@ router.post(
   utilities.handleErrors(accountController.loginAccount)
 )
 
+router.get(
+  "/accounts",
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildAccounts)
+)
+
 module.exports = router;

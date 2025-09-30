@@ -325,6 +325,30 @@ input:required:valid {
   padding: 5px;
 }
 
+#inventoryDisplay table {
+  width: 100%;
+}
+
+#inventoryDisplay th,
+#inventoryDisplay td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+#inventoryDisplay tbody td:hover {
+  background-color: rgb(167, 167, 167);
+}
+
+#classificationList {
+  padding: 3px;
+  margin: 5px;
+}
+
+button:disabled {
+  background-color: #ccc;
+}
+
 footer {
   margin-bottom: 5rem;
   border-bottom: 5px solid skyblue;
