@@ -134,4 +134,45 @@ Util.checkJWTToken = (req, res, next) => {
   }
  }
 
+ /* ****************************************
+ * Middleware to check account type
+ * Only allows "Employee" or "Admin" access
+ **************************************** */
+Util.checkAccountType = async function (req, res, next) {
+  try {
+    const token = req.cookies.jwt
+
+    if (!token) {
+      req.flash("notice", "You must be logged in to access this page.")
+      return res.status(401).render("account/login", {
+        title: "Login",
+        nav: await require("./").getNav(),
+        errors: null,
+      })
+    }
+
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+
+    if (decoded.account_type === "Employee" || decoded.account_type === "Admin") {
+      res.locals.accountData = decoded
+      next()
+    } else {
+      req.flash("notice", "You do not have permission to access that page.")
+      return res.status(403).render("account/login", {
+        title: "Login",
+        nav: await require("./").getNav(),
+        errors: null,
+      })
+    }
+  } catch (err) {
+    console.error("Authorization Error:", err.message)
+    req.flash("notice", "Authorization failed. Please log in again.")
+    return res.status(403).render("account/login", {
+      title: "Login",
+      nav: await require("./").getNav(),
+      errors: null,
+    })
+  }
+}
+
 module.exports = Util

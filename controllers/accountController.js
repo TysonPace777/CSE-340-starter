@@ -119,12 +119,89 @@ async function loginAccount(req, res) {
 
 async function buildAccounts(req, res, next) {
   let nav = await utilities.getNav()
+  const accountData = res.locals.accountData
   res.render("account/accounts", {
     title: "Account Management",
     nav,
+    accountData,
     errors: null
   })
 }
 
+async function buildUpdateAccount(req, res, next) {
+  let nav = await utilities.getNav()
+  const account_id = res.locals.accountData.account_id
+  const accountData = await accountModel.getAccountById(account_id)
 
-module.exports = { buildLogin, buildRegister, registerAccount, loginAccount, buildAccounts }
+  if (!accountData) {
+    req.flash("notice", "Account not found.")
+    return res.redirect("/account/accounts")
+  }
+
+  res.render("account/update", {
+    title: "Update Account Information",
+    nav,
+    errors: null,
+    account_id: accountData.account_id,
+    account_firstname: accountData.account_firstname,
+    account_lastname: accountData.account_lastname,
+    account_email: accountData.account_email
+  })
+}
+
+async function updatePassword(req, res, next) {
+  let nav = await utilities.getNav()
+  const { account_id, account_password } = req.body
+
+  if (!account_password) {
+    req.flash("notice", "Please provide a new password.")
+    return res.redirect(`/account/update/${account_id}`)
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(account_password, 10)
+    const result = await accountModel.updatePassword(account_id, hashedPassword)
+
+    if (result.rowCount > 0) {
+      req.flash("notice", "Your password was successfully updated.")
+      return res.redirect("/account/accounts")
+    } else {
+      req.flash("notice", "Password update failed.")
+      return res.redirect(`/account/update/${account_id}`)
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
+async function updateAccount(req, res, next) {
+  let nav = await utilities.getNav()
+  const { account_id, account_firstname, account_lastname, account_email } = req.body
+
+  try {
+    const result = await accountModel.updateAccount(
+      account_id,
+      account_firstname,
+      account_lastname,
+      account_email
+    )
+
+    if (result.rowCount > 0) {
+      const accountData = await accountModel.getAccountById(account_id)
+      req.flash("notice", "Your account information was successfully updated.")
+      return res.render("account/accounts", {
+        title: "Account Management",
+        nav,
+        accountData,
+        errors: null
+      })
+    } else {
+      req.flash("notice", "Account update failed.")
+      return res.redirect(`/account/update/${account_id}`)
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
+module.exports = { updatePassword, buildUpdateAccount, buildLogin, buildRegister, registerAccount, loginAccount, buildAccounts, updateAccount }

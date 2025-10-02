@@ -228,4 +228,97 @@ validate.checkUpdateData = async (req, res, next) => {
   next()
 }
 
+validate.checkAccountUpdateData = async (req, res, next) => {
+  let errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav()
+    res.render("account/update", {
+      errors,
+      title: "Update Account Information",
+      nav,
+      account_id: req.body.account_id,
+      account_firstname: req.body.account_firstname,
+      account_lastname: req.body.account_lastname,
+      account_email: req.body.account_email
+    })
+    return
+  }
+  next()
+}
+
+validate.checkPasswordData = async (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav()
+    const accountData = await accountModel.getAccountById(req.body.account_id)
+    res.render("account/update", {
+      errors,
+      title: "Update Account Information",
+      nav,
+      account_id: accountData.account_id,
+      account_firstname: accountData.account_firstname,
+      account_lastname: accountData.account_lastname,
+      account_email: accountData.account_email
+    })
+    return
+  }
+  next()
+}
+
+validate.updateRules = () => {
+  return [
+    body("account_firstname")
+      .trim()
+      .notEmpty()
+      .withMessage("Please provide a first name."),
+    body("account_lastname")
+      .trim()
+      .notEmpty()
+      .withMessage("Please provide a last name."),
+    body("account_email")
+      .trim()
+      .notEmpty()
+      .isEmail()
+      .normalizeEmail()
+      .withMessage("A valid email is required.")
+      .custom(async (account_email, { req }) => {
+        const existing = await accountModel.checkExistingEmail(account_email)
+        if (existing && existing.account_id != req.body.account_id) {
+          throw new Error("Email already in use")
+        }
+      })
+  ]
+}
+
+validate.passwordRules = () => {
+  return [
+    body("account_password")
+      .trim()
+      .isStrongPassword({
+        minLength: 12,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+      .withMessage("Password does not meet requirements."),
+  ]
+}
+
+validate.checkPasswordData = async (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav()
+    const account_id = req.body.account_id
+    res.render("account/update", {
+      errors,
+      title: "Update Account Information",
+      nav,
+      ...req.body
+    })
+    return
+  }
+  next()
+}
+
 module.exports = validate

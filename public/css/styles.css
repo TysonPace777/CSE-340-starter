@@ -349,6 +349,14 @@ button:disabled {
   background-color: #ccc;
 }
 
+.space {
+  margin-right: 10px;
+}
+
+#tools a:hover {
+  text-decoration: underline;
+}
+
 footer {
   margin-bottom: 5rem;
   border-bottom: 5px solid skyblue;

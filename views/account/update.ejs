@@ -1,0 +1,80 @@
+<h1><%- title %></h1>
+<%- messages() %>
+
+<% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<h2>Update Account Information</h2>
+
+<form class="register" action="/account/update" method="post" id="accountUpdateForm">
+  <input type="hidden" name="account_id" value="<%= account_id %>">
+
+  <div>
+    <label for="account_firstname">First Name:</label>
+    <input 
+      type="text" 
+      id="account_firstname" 
+      name="account_firstname" 
+      value="<%= account_firstname || '' %>" 
+      required
+      pattern=".{1,}"
+      title="Please provide a first name">
+  </div>
+
+  <div>
+    <label for="account_lastname">Last Name:</label>
+    <input 
+      type="text" 
+      id="account_lastname" 
+      name="account_lastname" 
+      value="<%= account_lastname || '' %>" 
+      required
+      pattern=".{1,}"
+      title="Please provide a last name">
+  </div>
+
+  <div>
+    <label for="account_email">Email:</label>
+    <input 
+      type="email" 
+      id="account_email" 
+      name="account_email" 
+      value="<%= account_email || '' %>" 
+      required
+      placeholder="Enter a valid email address">
+  </div>
+
+  <div>
+    <button type="submit">Update Account</button>
+  </div>
+</form>
+
+<hr>
+
+<h2>Change Password</h2>
+<p>Enter a new password below to change your current one. 
+Your password must be at least 12 characters long and contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.</p>
+
+<form class="register" action="/account/update-password" method="post" id="passwordChangeForm">
+  <input type="hidden" name="account_id" value="<%= account_id %>">
+
+  <div>
+    <label for="account_password">New Password:</label>
+    <input 
+      type="password" 
+      id="account_password" 
+      name="account_password" 
+      required
+      pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+      title="Password must be at least 12 characters and contain 1 uppercase, 1 lowercase, 1 number, and 1 special character">
+  </div>
+
+  <div>
+    <button type="submit">Change Password</button>
+  </div>
+</form>

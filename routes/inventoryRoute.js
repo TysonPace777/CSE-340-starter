@@ -19,6 +19,7 @@ router.get("/trigger-error", (req, res, next) => {
 
 router.post(
     "/add-classification",
+    utilities.checkAccountType,
     invValidate.classificationRules(),
     invValidate.checkClassificationData,
     utilities.handleErrors(invController.addClassification)
@@ -26,11 +27,13 @@ router.post(
 
 router.get(
     "/add-classification",
+    utilities.checkAccountType,
     utilities.handleErrors(invController.buildAddClassification)
 )
 
 router.post(
     "/add-inventory",
+    utilities.checkAccountType,
     invValidate.inventoryRules(),
     invValidate.checkInventoryData,
     utilities.handleErrors(invController.addInventory)
@@ -38,23 +41,39 @@ router.post(
 
 router.get(
     "/add-inventory",
+    utilities.checkAccountType,
     utilities.handleErrors(invController.buildAddInventory)
 )
 
 router.get(
     "/getInventory/:classification_id",
+    utilities.checkAccountType,
     utilities.handleErrors(invController.getInventoryJSON)
 )
 
 router.get(
     "/edit/:inv_id",
+    utilities.checkAccountType,
     utilities.handleErrors(invController.buildEditInventory)
 )
 
 router.post(
     "/update/",
+    utilities.checkAccountType,
     invValidate.inventoryRules(),
     utilities.handleErrors(invController.updateInventory)
+)
+
+router.get(
+    "/delete/:inv_id",
+    utilities.checkAccountType,
+    utilities.handleErrors(invController.buildDeleteInventory)
+)
+
+router.post(
+    "/deletePost/",
+    utilities.checkAccountType,
+    utilities.handleErrors(invController.deleteInventory)
 )
 
 module.exports = router;

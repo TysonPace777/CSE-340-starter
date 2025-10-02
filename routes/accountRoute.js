@@ -35,4 +35,32 @@ router.get(
   utilities.handleErrors(accountController.buildAccounts)
 )
 
+router.get(
+  "/update",
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildUpdateAccount)
+)
+
+router.post(
+  "/update",
+  regValidate.updateRules(),
+  regValidate.checkAccountUpdateData,
+  utilities.handleErrors(accountController.updateAccount)
+)
+
+console.log("checkUpdateData:", regValidate.checkUpdateData);
+
+router.post(
+  "/update-password",
+  regValidate.passwordRules(),
+  regValidate.checkPasswordData,
+  utilities.handleErrors(accountController.updatePassword)
+)
+
+router.get("/logout", (req, res) => {
+  res.clearCookie("jwt");
+  req.flash("notice", "You have been logged out.");
+  res.redirect("/");
+});
+
 module.exports = router;
