@@ -1,4 +1,5 @@
 const invModel = require("../models/inventory-model")
+const accountModel = require("../models/account-model")
 const Util = {}
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
@@ -173,6 +174,27 @@ Util.checkAccountType = async function (req, res, next) {
       errors: null,
     })
   }
+}
+
+/* middleware for darkmode checks */
+Util.attachAccountData = async function (req, res, next) {
+  try {
+    if (req.cookies?.jwt) {
+      // decode JWT to get account_id
+      const jwt = require('jsonwebtoken');
+      const token = req.cookies.jwt;
+      const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      const accountId = decoded.account_id;
+
+      // fetch fresh account data
+      const accountData = await accountModel.getAccountById(accountId);
+      res.locals.accountData = accountData;
+    }
+  } catch (err) {
+    console.error('Error fetching accountData for layout:', err);
+    res.locals.accountData = null;
+  }
+  next();
 }
 
 module.exports = Util

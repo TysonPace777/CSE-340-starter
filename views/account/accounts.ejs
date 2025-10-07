@@ -10,3 +10,10 @@
 
 <p>You're Logged in.</p>
 <a href="/account/update">Update Account Information</a>
+<hr>
+<input type="hidden" id="account-id" value="<%= accountData?.account_id || '' %>">
+<label for="dark-mode" class="dark-check">
+  Dark Mode:<input type="checkbox" id="dark-mode" <%= accountData?.account_mode ? 'checked' : '' %>>
+</label>
+
+<script src="/js/dark-mode.js"></script>

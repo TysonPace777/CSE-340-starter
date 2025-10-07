@@ -119,7 +119,14 @@ async function loginAccount(req, res) {
 
 async function buildAccounts(req, res, next) {
   let nav = await utilities.getNav()
-  const accountData = res.locals.accountData
+  const accountId = res.locals.accountData?.account_id;
+
+  if (!accountId) {
+    return res.redirect("/account/login");
+  }
+
+  const accountData = await accountModel.getAccountById(accountId);
+  
   res.render("account/accounts", {
     title: "Account Management",
     nav,
@@ -204,4 +211,20 @@ async function updateAccount(req, res, next) {
   }
 }
 
-module.exports = { updatePassword, buildUpdateAccount, buildLogin, buildRegister, registerAccount, loginAccount, buildAccounts, updateAccount }
+async function toggleDarkMode(req, res) {
+  try {
+    const {accountId, darkMode} = req.body;
+    const updated = await accountModel.updateDarkMode(accountId, darkMode);
+
+    if (res.locals.accountData) {
+      res.locals.accountData.account_mode = updated.account_mode;
+    }
+
+    res.json({ success: true, darkMode: updated.account_mode});
+  } catch (err) {
+    console.error('Error updating dark mode:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+}
+
+module.exports = { toggleDarkMode, updatePassword, buildUpdateAccount, buildLogin, buildRegister, registerAccount, loginAccount, buildAccounts, updateAccount }

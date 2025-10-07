@@ -63,4 +63,9 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
+router.put(
+  '/dark-mode',
+  accountController.toggleDarkMode
+);
+
 module.exports = router;

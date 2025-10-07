@@ -321,6 +321,11 @@ input:required:valid {
   color: darkred;
 }
 
+body.dark .notice {
+  background-color: white;
+  border-radius: 5px;
+}
+
 .links li{
   padding: 5px;
 }
@@ -355,6 +360,39 @@ button:disabled {
 
 #tools a:hover {
   text-decoration: underline;
+}
+
+.dark-check {
+  padding: 6px;
+  margin: 3px;
+  border-radius: 6px;
+  background-color: black;
+  color: white;
+}
+
+body.dark .dark-check {
+  background-color: white;
+  color: black;
+}
+
+body.dark {
+  background-color: black;
+  color: white;
+}
+
+body.dark main a,
+body.dark footer a {
+  color: #e260e2;
+}
+
+body.dark header a,
+body.dark header,
+body.dark header #tools a,
+body.dark main, 
+body.dark nav,
+body.dark footer {
+  background-color: black;
+  color: white;
 }
 
 footer {

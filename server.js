@@ -53,6 +53,9 @@ app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-
 app.use(cookieParser())
 app.use(utilities.checkJWTToken)
 
+/* darkmode check */
+app.use(utilities.attachAccountData)
+
 /* ***********************
  * Routes
  *************************/

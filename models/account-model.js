@@ -45,7 +45,7 @@ async function updateAccount(account_id, account_firstname, account_lastname, ac
 
 async function getAccountById(account_id) {
   try {
-    const sql = 'SELECT account_id, account_firstname, account_lastname, account_email, account_type FROM account WHERE account_id = $1';
+    const sql = 'SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_mode FROM account WHERE account_id = $1';
     const result = await pool.query(sql, [account_id]);
     return result.rows[0];
   } catch (error) {
@@ -54,4 +54,16 @@ async function getAccountById(account_id) {
   }
 }
 
-module.exports = { getAccountById, registerAccount, checkExistingEmail, updatePassword, updateAccount }
+async function updateDarkMode(account_id, account_mode) {
+  const query = `
+  UPDATE account
+  SET account_mode = $1::boolean
+  WHERE account_id = $2
+  RETURNING account_mode;
+  `;
+  const values = [!!account_mode, account_id];
+  const result = await pool.query(query, values);
+  return result.rows[0];
+}
+
+module.exports = { updateDarkMode, getAccountById, registerAccount, checkExistingEmail, updatePassword, updateAccount }
